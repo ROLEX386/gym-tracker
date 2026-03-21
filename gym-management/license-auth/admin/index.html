@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Management Pro - Admin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- LOGIN SCREEN -->
+  <div id="login-screen" class="screen active">
+    <div class="login-card">
+      <div class="header">
+        <h1>Admin Portal</h1>
+        <p>Login to manage license requests</p>
+      </div>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input type="text" id="username" required>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required>
+        </div>
+        <button type="submit" class="btn" id="login-btn">Login</button>
+        <div id="login-error" class="error-msg"></div>
+      </form>
+    </div>
+  </div>
+
+  <!-- DASHBOARD SCREEN -->
+  <div id="dashboard-screen" class="screen">
+    <nav class="navbar">
+      <div class="nav-brand">Gym Management Pro — License Manager</div>
+      <button id="logout-btn" class="btn btn-outline">Logout</button>
+    </nav>
+    
+    <div class="dashboard-container">
+      <div class="tabs">
+        <button class="tab-btn active" data-status="pending">Pending</button>
+        <button class="tab-btn" data-status="approved">Approved</button>
+        <button class="tab-btn" data-status="denied">Denied</button>
+      </div>
+      
+      <div class="controls">
+        <button id="refresh-btn" class="btn btn-secondary">↻ Refresh Data</button>
+        <span id="last-updated" class="text-muted"></span>
+      </div>
+
+      <div id="requests-container" class="requests-grid">
+        <!-- Render cards here -->
+      </div>
+      
+      <div id="no-data-msg" class="no-data" style="display: none;">
+        No requests found in this category.
+      </div>
+    </div>
+  </div>
+
+  <!-- DENY MODAL -->
+  <div id="deny-modal" class="modal">
+    <div class="modal-content">
+      <h3>Deny Request</h3>
+      <p>Please enter a reason for denying this request. This will be shown to the user.</p>
+      <textarea id="deny-reason" rows="4" placeholder="e.g., Unable to verify business credentials"></textarea>
+      <div class="modal-actions">
+        <button id="cancel-deny-btn" class="btn btn-secondary">Cancel</button>
+        <button id="confirm-deny-btn" class="btn btn-danger">Confirm Denial</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- REVOKE MODAL -->
+  <div id="revoke-modal" class="modal">
+    <div class="modal-content">
+      <h3>🚫 Revoke Approved License</h3>
+      <p>This will cancel the approval and invalidate all download tokens for this device. Please provide a reason.</p>
+      <textarea id="revoke-reason" rows="4" placeholder="e.g., Payment not received, Fraudulent account, etc."></textarea>
+      <div class="modal-actions">
+        <button id="cancel-revoke-btn" class="btn btn-secondary">Cancel</button>
+        <button id="confirm-revoke-btn" class="btn btn-revoke-confirm">Confirm Revoke</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="dashboard.js"></script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gym Management Pro - License Request</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="background-anim"></div>
+  <div class="container">
+    <div class="card" id="main-card">
+      <div class="header">
+        <h1>Gym Management Pro</h1>
+        <p>Software License Authorization</p>
+      </div>
+
+      <!-- STEP 1: REQUEST FORM -->
+      <div id="step-request" class="step active">
+        <h2>Request Access</h2>
+        <form id="request-form">
+          <div class="form-group">
+            <label for="name">Full Name</label>
+            <input type="text" id="name" required placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address</label>
+            <input type="email" id="email" required placeholder="john@example.com">
+          </div>
+          <div class="form-group">
+            <label for="businessName">Business Name</label>
+            <input type="text" id="businessName" required placeholder="Fit Life Gym">
+          </div>
+          <div class="form-group">
+            <label for="deviceId">Device ID (Auto-detected)</label>
+            <input type="text" id="deviceId" readonly>
+            <small>This unique ID binds the software to your current device.</small>
+          </div>
+          <button type="submit" class="btn" id="submit-btn">Submit Request</button>
+        </form>
+        <div id="form-error" class="error-msg"></div>
+      </div>
+
+      <!-- STEP 2: PENDING SCREEN -->
+      <div id="step-pending" class="step">
+        <div class="spinner"></div>
+        <h2>⏳ Waiting for Authorization...</h2>
+        <p>Your request has been submitted successfully.</p>
+        <div class="details-box">
+          <p><strong>Name:</strong> <span id="pending-name"></span></p>
+          <p><strong>Business:</strong> <span id="pending-business"></span></p>
+          <p><strong>Device ID:</strong> <span id="pending-deviceId"></span></p>
+        </div>
+        <p class="poll-msg">This page will automatically update once approved.</p>
+      </div>
+
+      <!-- STEP 3: APPROVED -->
+      <div id="step-approved" class="step">
+        <div class="icon-success">✅</div>
+        <h2>Approved!</h2>
+        <p>Your download is starting automatically...</p>
+        <div class="progress-bar-container">
+          <div class="progress-bar" id="download-progress"></div>
+        </div>
+        <p class="small-text">If the download doesn't start, <a href="#" id="manual-download-link">click here</a>.</p>
+      </div>
+
+      <!-- STEP 4: DENIED -->
+      <div id="step-denied" class="step">
+        <div class="icon-error">❌</div>
+        <h2>Authorization Denied</h2>
+        <div class="reason-box">
+          <p><strong>Reason:</strong> <span id="denial-reason"></span></p>
+        </div>
+        <button class="btn btn-secondary" id="contact-support-btn">Contact Support</button>
+      </div>
+
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

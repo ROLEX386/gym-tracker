@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Gym Tracker Secure Installer</title>
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #121212; color: #fff; display: flex; align-items: center; justify-content: center; height: 100vh; margin: 0; text-align: center; }
+        .container { background: #1e1e1e; padding: 40px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 80%; border: 1px solid #333; }
+        h1 { margin-top: 0; color: #00bcd4; font-size: 24px; }
+        p { color: #aaa; margin-bottom: 30px; line-height: 1.5; }
+        .session-id { background: rgba(0, 188, 212, 0.1); color: #00bcd4; padding: 8px 16px; border-radius: 6px; font-family: monospace; font-size: 18px; font-weight: bold; letter-spacing: 2px; border: 1px dashed #00bcd4; margin-bottom: 25px; display: inline-block; }
+        .status { font-weight: bold; color: #fff; min-height: 24px; animation: pulse 2s infinite; }
+        .success { color: #4caf50; animation: none; }
+        .error { color: #f44336; animation: none; }
+        .loader { border: 4px solid #333; border-top: 4px solid #00bcd4; border-radius: 50%; width: 40px; height: 40px; animation: spin 1s linear infinite; margin: 0 auto 20px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        @keyframes pulse { 0% { opacity: 0.6; } 50% { opacity: 1; } 100% { opacity: 0.6; } }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Secure Installation Locked</h1>
+        <p>This software package is heavily encrypted.<br/>To decrypt and install it, please open the <b>Simple SaaS</b> app on your mobile device and approve this request.</p>
+        
+        <div id="loader" class="loader"></div>
+        <div id="session-display" class="session-id" style="display: none;"></div>
+        <div id="status" class="status">Connecting to Auth Bridge...</div>
+        
+        <button id="closeBtn" style="display:none; margin: 30px auto 0; background: #00bcd4; color:#000; border:none; padding:10px 20px; border-radius:6px; cursor:pointer; font-weight:bold;">Exit Installer</button>
+    </div>
+
+    <script>
+        const { ipcRenderer } = require('electron');
+        const axios = require('axios');
+        
+        const statusEl = document.getElementById('status');
+        const loaderEl = document.getElementById('loader');
+        const sessionEl = document.getElementById('session-display');
+        const closeBtn = document.getElementById('closeBtn');
+
+        // Request an Auth Session ID from the server
+        axios.post('https://simple-saas-auth-bridge.loca.lt/request-auth')
+            .then(res => {
+                const sessionId = res.data.sessionId;
+                sessionEl.innerText = sessionId.substring(0, 8).toUpperCase();
+                sessionEl.style.display = 'inline-block';
+                statusEl.innerText = 'Waiting for Mobile Authorization...';
+
+                // Open Websocket to await the Decryption Key
+                const ws = new WebSocket('wss://simple-saas-auth-bridge.loca.lt');
+                ws.onopen = () => {
+                    ws.send(JSON.stringify({ type: 'desktop_connect', sessionId }));
+                };
+
+                ws.onmessage = async (e) => {
+                    const data = JSON.parse(e.data);
+                    
+                    if (data.type === 'auth_success') {
+                        statusEl.innerText = 'Authorization Received! Decrypting payload...';
+                        
+                        const result = await ipcRenderer.invoke('decrypt-and-install', {
+                            aesKey: data.aesKey,
+                            aesIv: data.aesIv
+                        });
+
+                        if (result.success) {
+                             loaderEl.style.display = 'none';
+                             statusEl.className = 'status success';
+                             statusEl.innerHTML = `✅ Installed Successfully!<br/><br/><span style="color:#aaa;font-size:12px;font-weight:normal;">Location: ${result.path}</span>`;
+                             closeBtn.style.display = 'block';
+                        } else {
+                             loaderEl.style.display = 'none';
+                             statusEl.className = 'status error';
+                             statusEl.innerText = 'Decryption Failed: ' + result.error;
+                        }
+                    } else if (data.type === 'auth_denied') {
+                        loaderEl.style.display = 'none';
+                        statusEl.className = 'status error';
+                        statusEl.innerText = 'Access Denied by Device.';
+                    }
+                };
+            })
+            .catch(err => {
+                loaderEl.style.display = 'none';
+                statusEl.className = 'status error';
+                statusEl.innerText = 'Failed to connect to Auth Server.';
+            });
+
+        closeBtn.onclick = () => window.close();
+    </script>
+</body>
+</html>

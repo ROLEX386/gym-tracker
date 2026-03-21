@@ -1,0 +1,8 @@
+{
+  "softwareName": "Gym Management Pro",
+  "softwareVersion": "1.0.0",
+  "softwareFilePath": "../gym-software/dist/GymManagementSetup.exe",
+  "adminEmail": "you@example.com",
+  "downloadTokenExpiry": "15m",
+  "pollInterval": 5000
+}

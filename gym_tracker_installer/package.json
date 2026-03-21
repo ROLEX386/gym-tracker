@@ -1,0 +1,22 @@
+{
+  "name": "gym_tracker_installer",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.cjs",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-packager . \"Gym Tracker Secure Installer\" --platform=win32 --arch=x64 --out=\"C:\\Users\\karna\\OneDrive\\Desktop\\GymTracker_Secure_Installer\" --overwrite"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "devDependencies": {
+    "electron": "^41.0.2",
+    "electron-packager": "^17.1.2"
+  },
+  "dependencies": {
+    "axios": "^1.13.6",
+    "extract-zip": "^2.0.1"
+  }
+}

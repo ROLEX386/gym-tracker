@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "FitTrack Gym",
+    "slug": "fittrack-gym",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#050510",
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#050510"
+      },
+      "package": "com.fittrack.gym"
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "499a7f2d-7d31-46b3-ab7a-bea7b3bdc72e"
+      }
+    },
+    "owner": "abhi3806"
+  }
+}

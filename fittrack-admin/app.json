@@ -1,0 +1,25 @@
+{
+  "expo": {
+    "name": "FitTrack Admin",
+    "slug": "fittrack-admin",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "userInterfaceStyle": "dark",
+    "backgroundColor": "#050510",
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#050510"
+      },
+      "package": "com.fittrack.admin"
+    },
+    "plugins": [
+      "expo-font"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "82ea7218-5120-4951-a491-8b83e8795eb9"
+      }
+    },
+    "owner": "abhi3806"
+  }
+}
